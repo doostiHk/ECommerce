@@ -1,0 +1,17 @@
+services:
+
+  gateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  product-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  order-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  notification-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production

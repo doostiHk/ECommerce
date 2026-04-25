@@ -1,0 +1,90 @@
+services:
+  keycloak-db:
+    ports:
+      - "5433:5432"
+
+  keycloak:
+    command: start-dev   
+    ports:
+      - "8080:8080"
+    environment:
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_STRICT_HTTPS: false           
+      KC_HTTP_ENABLED: true
+
+  rabbitmq:
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  seq:
+    ports:
+      - "5341:80"
+
+  product-db:
+    ports:
+      - "5434:5432"
+
+  order-db:
+    ports:
+      - "5435:5432"
+
+  notification-db:
+    ports:
+      - "5436:5432"
+    volumes:
+      - notification_data:/var/lib/postgresql/data
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Gateway.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:7000
+      - ConnectionStrings__Default=Host=keycloak-db;Port=5432;Database=keycloak;Username=keycloak;Password=${KEYCLOAK_DB_PASSWORD}
+      - Keycloak__Authority=http://keycloak:8080/realms/Core  
+    ports:
+      - "7000:7000"
+
+  product-service:
+    build:
+      context: .
+      dockerfile: services/product/Product.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:7002
+      - ConnectionStrings__Default=Host=product-db;Port=5432;Database=product;Username=product;Password=${PRODUCT_DB_PASSWORD}
+      - Keycloak__Authority=http://keycloak:8080/realms/Core 
+      - RabbitMq__Host=rabbitmq
+      - Seq__Url=http://seq:80
+    ports:
+      - "7002:7002"
+
+  order-service:
+    build:
+      context: .
+      dockerfile: services/order/Order.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:7003
+      - ConnectionStrings__Default=Host=order-db;Port=5432;Database=order;Username=order;Password=${ORDER_DB_PASSWORD}
+      - Keycloak__Authority=http://keycloak:8080/realms/Core 
+      - RabbitMq__Host=rabbitmq
+      - Seq__Url=http://seq:80
+    ports:
+      - "7003:7003"
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification/Notification.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:7004
+      - ConnectionStrings__Default=Host=notification-db;Port=5432;Database=notification;Username=notification;Password=${NOTIFICATION_DB_PASSWORD}
+      - Keycloak__Authority=http://keycloak:8080/realms/Core 
+      - RabbitMq__Host=rabbitmq
+      - Seq__Url=http://seq:80
+    ports:
+      - "7004:7004"
