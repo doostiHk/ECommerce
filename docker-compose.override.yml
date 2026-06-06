@@ -18,6 +18,8 @@ services:
       - "15672:15672"
 
   seq:
+    environment:
+      - SEQ_FIRSTRUN_ADMIN_PASSWORD=${SEQ_ADMIN_PASSWORD:-seq_strong}
     ports:
       - "5341:80"
 

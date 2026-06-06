@@ -69,12 +69,15 @@ services:
     container_name: seq
     environment:
       ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_ADMINPASSWORD: ${SEQ_ADMIN_PASSWORD:-seq_strong}
     healthcheck:
       test: ["CMD", "curl" , "-f" ,"http://localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s 
+    volumes:
+      - seq_data:/data
 
   product-db:
     image: postgres:17-alpine
@@ -227,3 +230,4 @@ volumes:
   product_data:
   order_data:
   notification_data:
+  seq_data:
