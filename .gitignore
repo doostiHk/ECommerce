@@ -3,3 +3,6 @@ obj/
 .env
 *.log
 .vs/
+*.tar
+*.tar.gz
+*.zip
