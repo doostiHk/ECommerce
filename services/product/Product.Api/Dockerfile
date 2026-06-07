@@ -1,6 +1,9 @@
 # =================== base
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-USER $APP_UID
+ARG APP_UID=1000
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+RUN id appuser 2>/dev/null || (useradd -m -u ${APP_UID} appuser 2>/dev/null || useradd -m appuser)
+USER appuser
 WORKDIR /app
 EXPOSE 7002
 

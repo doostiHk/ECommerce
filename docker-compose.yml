@@ -33,11 +33,9 @@ services:
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
       KC_HOSTNAME: keycloak
-      KC_HOSTNAME_PORT: 8080
       KC_HOSTNAME_STRICT: false
-      KC_HOSTNAME_STRICT_HTTPS: false           
       KC_HTTP_ENABLED: true
-      KC_HEALTH_ENABLED: true                   
+      KC_HEALTH_ENABLED: true
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_strong}
       # Keycloakify cache disable (dev)
@@ -47,12 +45,12 @@ services:
     depends_on:
       keycloak-db:
         condition: service_healthy
-    healthcheck:                               
-      test: ["CMD", "curl", "-f", "http://localhost:8080/realms/master"]
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q UP"]
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 60s
+      retries: 10
+      start_period: 120s
 
   rabbitmq:
     image: rabbitmq:3-management
