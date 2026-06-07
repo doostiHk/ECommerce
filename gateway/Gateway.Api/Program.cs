@@ -81,6 +81,9 @@ builder.Services.AddAuthorization(options =>
 });
 
 // -------------------------------------------------------------------
+builder.Services.AddHealthChecks();
+
+// -------------------------------------------------------------------
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("Yarp:ReverseProxy"))
     .AddTransforms(transforms =>

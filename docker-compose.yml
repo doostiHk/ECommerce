@@ -19,10 +19,10 @@ services:
       start_period: 20s   
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.0    
+    image: quay.io/keycloak/keycloak:26.0
     container_name: idp-keycloak
     restart: unless-stopped
-    command: start-dev   
+    command: start-dev --import-realm
     env_file:
       - .env
     environment:
@@ -42,6 +42,8 @@ services:
       KC_SPI_THEME_STATIC_MAX_AGE: -1
       KC_SPI_THEME_CACHE_THEMES: false
       KC_SPI_THEME_CACHE_TEMPLATES: false
+    volumes:
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
     depends_on:
       keycloak-db:
         condition: service_healthy
