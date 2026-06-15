@@ -42,8 +42,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:7000
-      - ConnectionStrings__Default=Host=keycloak-db;Port=5432;Database=keycloak;Username=keycloak;Password=${KEYCLOAK_DB_PASSWORD}
-      - Keycloak__Authority=http://keycloak:8080/realms/Core  
+      - Keycloak__Authority=http://keycloak:8080/realms/Core
+      - Keycloak__ClientId=web-frontend
+      - Keycloak__AdminUsername=${KEYCLOAK_ADMIN:-admin}
+      - Keycloak__AdminPassword=${KEYCLOAK_ADMIN_PASSWORD:-admin_strong}
+      - ReverseProxy__Clusters__product-cluster__Destinations__d1__Address=http://product-service:7002/
+      - ReverseProxy__Clusters__order-cluster__Destinations__d1__Address=http://order-service:7003/
+      - ReverseProxy__Clusters__notification-cluster__Destinations__d1__Address=http://notification-service:7004/
     ports:
       - "7000:7000"
 
