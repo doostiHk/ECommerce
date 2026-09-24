@@ -1,6 +1,9 @@
 bin/
 obj/
+out/
 .env
+!.env.example
+!**/.env.example
 *.log
 .vs/
 *.tar

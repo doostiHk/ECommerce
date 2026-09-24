@@ -1,9 +1,13 @@
-record LoginRequest(string Username, string Password);
-record RegisterRequest(string Username, string Email, string Password, string? FirstName, string? LastName);
-record RefreshRequest(string RefreshToken);
-record LogoutRequest(string RefreshToken);
+using System.Text.Json.Serialization;
 
-record TokenResponse(
+namespace Gateway.Api.Authenticate.Models;
+
+public record LoginRequest(string Username, string Password);
+public record RegisterRequest(string Username, string Email, string Password, string? FirstName, string? LastName);
+public record RefreshRequest(string RefreshToken);
+public record LogoutRequest(string RefreshToken);
+
+public record TokenResponse(
     [property: JsonPropertyName("access_token")] string AccessToken,
     [property: JsonPropertyName("expires_in")] int ExpiresIn,
     [property: JsonPropertyName("refresh_token")] string? RefreshToken,

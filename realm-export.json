@@ -85,6 +85,15 @@
         "clientRole": false,
         "containerId": "ca8d6b5a-a153-4b9d-91cc-2da1c59dfadb",
         "attributes": {}
+      },
+      {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "name": "admin",
+        "description": "Can manage catalog products (create/update/delete).",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "ca8d6b5a-a153-4b9d-91cc-2da1c59dfadb",
+        "attributes": {}
       }
     ],
     "client": {
@@ -337,7 +346,7 @@
           "attributes": {}
         }
       ],
-      "web‑frontend": [],
+      "web-frontend": [],
       "account": [
         {
           "id": "18414620-64d5-4a01-a881-f2ccdc0b89d5",
@@ -501,6 +510,39 @@
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
     {
+      "id": "b7c8d9e0-f1a2-4344-b556-667788990011",
+      "username": "catalog-admin",
+      "email": "catalog-admin@ecommerce.local",
+      "emailVerified": true,
+      "firstName": "Catalog",
+      "lastName": "Admin",
+      "createdTimestamp": 1774800000000,
+      "enabled": true,
+      "totp": false,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin@123",
+          "temporary": false
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "admin",
+        "default-roles-core"
+      ],
+      "clientRoles": {
+        "product-service": [
+          "product"
+        ]
+      },
+      "notBefore": 0,
+      "groups": [
+        "orderProduct"
+      ]
+    },
+    {
       "id": "d9d79271-9ede-4578-be18-01c273366dc5",
       "username": "service-account-usermanager‑service",
       "emailVerified": false,
@@ -561,6 +603,12 @@
       "realmRoles": [
         "default-roles-core"
       ],
+      "clientRoles": {
+        "realm-management": [
+          "view-users",
+          "query-users"
+        ]
+      },
       "notBefore": 0,
       "groups": []
     }
@@ -1130,7 +1178,7 @@
       "id": "a75c5e98-634f-4a12-b46a-560587fd176c",
       "clientId": "product-service",
       "name": "product-service",
-      "description": "",
+      "description": "Product service confidential client for admin user lookups",
       "rootUrl": "",
       "adminUrl": "",
       "baseUrl": "",
@@ -1138,15 +1186,15 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "product-service-secret",
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
-      "standardFlowEnabled": true,
+      "standardFlowEnabled": false,
       "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
+      "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": true,
       "publicClient": false,
       "frontchannelLogout": false,
@@ -1340,8 +1388,8 @@
     },
     {
       "id": "a090fd81-d257-44d6-909b-e1465c436174",
-      "clientId": "web‑frontend",
-      "name": "web‑frontend",
+      "clientId": "web-frontend",
+      "name": "web-frontend",
       "description": "",
       "rootUrl": "http://localhost:7000",
       "adminUrl": "",

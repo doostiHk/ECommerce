@@ -1,6 +1,61 @@
-@Product.Api_HostAddress = http://localhost:5154
+@Gateway_HostAddress = http://localhost:7000
+@Product_HostAddress = http://localhost:7002
 
-GET {{Product.Api_HostAddress}}/weatherforecast/
+### Health - Gateway
+GET {{Gateway_HostAddress}}/health
+
+### Health - Product
+GET {{Product_HostAddress}}/health
+
+### Login as catalog-admin (realm role: admin)
+POST {{Gateway_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "catalog-admin",
+  "password": "Admin@123"
+}
+
+### Get products via Gateway (public)
+GET {{Gateway_HostAddress}}/products
 Accept: application/json
 
-###
+### Get products via Product service (public)
+GET {{Product_HostAddress}}/products
+Accept: application/json
+
+### Create product via Gateway (requires admin JWT)
+POST {{Gateway_HostAddress}}/products
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse",
+  "description": "Ergonomic wireless mouse",
+  "sku": "MOUSE-001",
+  "price": 29.99,
+  "stockQuantity": 100,
+  "isActive": true
+}
+
+### Get product by id via Gateway
+GET {{Gateway_HostAddress}}/products/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Update product via Gateway (requires admin JWT)
+PUT {{Gateway_HostAddress}}/products/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse Pro",
+  "description": "Ergonomic wireless mouse with extra buttons",
+  "sku": "MOUSE-001",
+  "price": 39.99,
+  "stockQuantity": 80,
+  "isActive": true
+}
+
+### Delete product via Gateway (requires admin JWT)
+DELETE {{Gateway_HostAddress}}/products/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{access_token}}

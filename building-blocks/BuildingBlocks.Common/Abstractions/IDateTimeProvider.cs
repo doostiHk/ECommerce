@@ -1,0 +1,6 @@
+namespace BuildingBlocks.Common.Abstractions;
+
+public interface IDateTimeProvider
+{
+    DateTime UtcNow { get; }
+}

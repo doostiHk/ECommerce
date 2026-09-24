@@ -7,8 +7,12 @@ services:
     ports:
       - "8080:8080"
     environment:
+      # Service-name hostname so container JWKS/issuer URLs stay reachable on the Docker network.
+      # Clients should authenticate via Gateway /auth/login (not by calling Keycloak from the host).
       KC_HOSTNAME: keycloak
-      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
 
   rabbitmq:
     ports:
@@ -43,9 +47,16 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:7000
       - Keycloak__Authority=http://keycloak:8080/realms/Core
-      - Keycloak__ClientId=web-frontend
+      - Keycloak__MetadataAddress=http://keycloak:8080/realms/Core/.well-known/openid-configuration
+      - Keycloak__ClientId=${KEYCLOAK_CLIENT_ID:-web-frontend}
       - Keycloak__AdminUsername=${KEYCLOAK_ADMIN:-admin}
       - Keycloak__AdminPassword=${KEYCLOAK_ADMIN_PASSWORD:-admin_strong}
+      - Keycloak__RequireHttpsMetadata=false
+      - Keycloak__ValidIssuers__0=http://keycloak:8080/realms/Core
+      - Keycloak__ValidIssuers__1=http://localhost:8080/realms/Core
+      - Cors__AllowedOrigins__0=http://localhost:3000
+      - Cors__AllowedOrigins__1=http://localhost:5173
+      - Cors__AllowedOrigins__2=http://localhost:7000
       - ReverseProxy__Clusters__product-cluster__Destinations__d1__Address=http://product-service:7002/
       - ReverseProxy__Clusters__order-cluster__Destinations__d1__Address=http://order-service:7003/
       - ReverseProxy__Clusters__notification-cluster__Destinations__d1__Address=http://notification-service:7004/
@@ -59,12 +70,30 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:7002
-      - ConnectionStrings__Default=Host=product-db;Port=5432;Database=product;Username=product;Password=${PRODUCT_DB_PASSWORD}
-      - Keycloak__Authority=http://keycloak:8080/realms/Core 
+      - ConnectionStrings__Default=Host=product-db;Port=5432;Database=product;Username=product;Password=${PRODUCT_DB_PASSWORD:-Product@123}
+      - Keycloak__Authority=http://keycloak:8080/realms/Core
+      - Keycloak__MetadataAddress=http://keycloak:8080/realms/Core/.well-known/openid-configuration
+      - Keycloak__RequireHttpsMetadata=false
+      - Keycloak__ValidIssuers__0=http://keycloak:8080/realms/Core
+      - Keycloak__ValidIssuers__1=http://localhost:8080/realms/Core
+      - Keycloak__Admin__Realm=Core
+      - Keycloak__Admin__ClientId=product-service
+      - Keycloak__Admin__ClientSecret=${PRODUCT_SERVICE_CLIENT_SECRET:-product-service-secret}
+      - Keycloak__Admin__Username=${KEYCLOAK_ADMIN:-admin}
+      - Keycloak__Admin__Password=${KEYCLOAK_ADMIN_PASSWORD:-admin_strong}
       - RabbitMq__Host=rabbitmq
       - Seq__Url=http://seq:80
     ports:
       - "7002:7002"
+    depends_on:
+      product-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      seq:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
 
   order-service:
     build:

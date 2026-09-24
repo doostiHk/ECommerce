@@ -1,6 +1,30 @@
-@Gateway.Api_HostAddress = http://localhost:5298
+@Gateway.Api_HostAddress = http://localhost:7000
 
-GET {{Gateway.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Health
+GET {{Gateway.Api_HostAddress}}/health
 
-###
+### Login
+POST {{Gateway.Api_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "catalog-admin",
+  "password": "Admin@123"
+}
+
+### List products (public)
+GET {{Gateway.Api_HostAddress}}/products
+
+### Create product (admin)
+POST {{Gateway.Api_HostAddress}}/products
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse",
+  "description": "Ergonomic wireless mouse",
+  "sku": "MOUSE-001",
+  "price": 29.99,
+  "stockQuantity": 100,
+  "isActive": true
+}
