@@ -14,7 +14,6 @@ public record CreateProductCommand(
     string? Description,
     string Sku,
     decimal Price,
-    int StockQuantity,
     bool IsActive) : IRequest<ProductResponse>;
 
 public sealed class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
@@ -24,8 +23,6 @@ public sealed class CreateProductCommandValidator : AbstractValidator<CreateProd
         RuleFor(x => x.Name).NotEmpty().MaximumLength(200);
         RuleFor(x => x.Description).MaximumLength(2000);
         RuleFor(x => x.Sku).NotEmpty().MaximumLength(64);
-        RuleFor(x => x.Price).GreaterThanOrEqualTo(0);
-        RuleFor(x => x.StockQuantity).GreaterThanOrEqualTo(0);
     }
 }
 
@@ -46,7 +43,6 @@ public sealed class CreateProductCommandHandler(
             Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim(),
             Sku = request.Sku.Trim(),
             Price = request.Price,
-            StockQuantity = request.StockQuantity,
             IsActive = request.IsActive
         };
 

@@ -25,6 +25,5 @@ Content-Type: application/json
   "description": "Ergonomic wireless mouse",
   "sku": "MOUSE-001",
   "price": 29.99,
-  "stockQuantity": 100,
   "isActive": true
 }

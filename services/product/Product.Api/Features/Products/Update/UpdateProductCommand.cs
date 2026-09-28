@@ -14,7 +14,6 @@ public record UpdateProductCommand(
     string? Description,
     string Sku,
     decimal Price,
-    int StockQuantity,
     bool IsActive) : IRequest<ProductResponse>;
 
 public sealed class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
@@ -26,7 +25,6 @@ public sealed class UpdateProductCommandValidator : AbstractValidator<UpdateProd
         RuleFor(x => x.Description).MaximumLength(2000);
         RuleFor(x => x.Sku).NotEmpty().MaximumLength(64);
         RuleFor(x => x.Price).GreaterThanOrEqualTo(0);
-        RuleFor(x => x.StockQuantity).GreaterThanOrEqualTo(0);
     }
 }
 
@@ -47,7 +45,6 @@ public sealed class UpdateProductCommandHandler(
         product.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
         product.Sku = request.Sku.Trim();
         product.Price = request.Price;
-        product.StockQuantity = request.StockQuantity;
         product.IsActive = request.IsActive;
 
         await repository.UpdateAsync(product, cancellationToken);

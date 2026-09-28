@@ -24,7 +24,6 @@ public static class ProductMappings
             product.Description,
             product.Sku,
             product.Price,
-            product.StockQuantity,
             product.IsActive,
             product.CreatedAtUtc,
             product.CreatedByUserId,

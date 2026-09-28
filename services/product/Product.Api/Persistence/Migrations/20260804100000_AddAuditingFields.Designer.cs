@@ -63,9 +63,6 @@ partial class AddAuditingFields
                     .HasMaxLength(64)
                     .HasColumnType("character varying(64)");
 
-                b.Property<int>("StockQuantity")
-                    .HasColumnType("integer");
-
                 b.HasKey("Id");
 
                 b.HasIndex("Sku")

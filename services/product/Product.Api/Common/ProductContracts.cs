@@ -6,7 +6,6 @@ public record ProductResponse(
     string? Description,
     string Sku,
     decimal Price,
-    int StockQuantity,
     bool IsActive,
     DateTime CreatedAtUtc,
     string? CreatedByUserId,
@@ -20,7 +19,6 @@ public record CreateProductRequest(
     string? Description,
     string Sku,
     decimal Price,
-    int StockQuantity,
     bool IsActive = true);
 
 public record UpdateProductRequest(
@@ -28,5 +26,4 @@ public record UpdateProductRequest(
     string? Description,
     string Sku,
     decimal Price,
-    int StockQuantity,
     bool IsActive);

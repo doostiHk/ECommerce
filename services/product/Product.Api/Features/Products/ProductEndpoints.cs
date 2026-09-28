@@ -84,7 +84,6 @@ public static class ProductEndpoints
                 request.Description,
                 request.Sku,
                 request.Price,
-                request.StockQuantity,
                 request.IsActive),
             cancellationToken);
 
@@ -104,7 +103,6 @@ public static class ProductEndpoints
                 request.Description,
                 request.Sku,
                 request.Price,
-                request.StockQuantity,
                 request.IsActive),
             cancellationToken);
 

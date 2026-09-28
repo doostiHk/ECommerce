@@ -53,9 +53,6 @@ partial class InitialCreate
                     .HasMaxLength(64)
                     .HasColumnType("character varying(64)");
 
-                b.Property<int>("StockQuantity")
-                    .HasColumnType("integer");
-
                 b.Property<DateTime?>("UpdatedAtUtc")
                     .HasColumnType("timestamp with time zone");
 

@@ -34,7 +34,6 @@ Content-Type: application/json
   "description": "Ergonomic wireless mouse",
   "sku": "MOUSE-001",
   "price": 29.99,
-  "stockQuantity": 100,
   "isActive": true
 }
 
@@ -52,7 +51,6 @@ Content-Type: application/json
   "description": "Ergonomic wireless mouse with extra buttons",
   "sku": "MOUSE-001",
   "price": 39.99,
-  "stockQuantity": 80,
   "isActive": true
 }
 
